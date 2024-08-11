@@ -1,0 +1,49 @@
+---
+- name: Configuración de servidores
+  hosts: webservers
+  become: yes
+  tasks:
+    - name: Actualizar cache de apt
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: Instalar Apache
+      apt:
+        name: apache2
+        state: present
+
+    - name: Instalar cowsay
+      apt:
+        name: cowsay
+        state: present
+
+    - name: Crear archivo de prueba
+      file:
+        path: /tmp/testfile
+        state: touch
+
+    - name: Copiar archivo de ejemplo
+      copy:
+        src: /mnt/c/Users/ginov/Documents/example.txt
+        dest: /tmp/example.txt
+
+    - name: Crear carpetas
+      file:
+        path: /tmp/newdir
+        state: directory
+
+    - name: Iniciar Apache
+      service:
+        name: apache2
+        state: started
+        enabled: yes
+
+    - name: Agregar usuario
+      user:
+        name: newuser
+        state: present
+
+    - name: Ejecutar script
+      script: /mnt/c/Users/ginov/Documents/setup.sh
+
